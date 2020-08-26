@@ -1,0 +1,16 @@
+Subject: The Hour of Code is coming
+
+Hello,
+
+Most of us have a vague idea that a knowledge of computer science will help you get a job, but the actual numbers are pretty shocking:
+
+New programming jobs are growing 3 times faster than the number of students entering the field.
+More than 50 percent of all math and science jobs are for computer scientists.
+Computer science jobs are the highest-paying jobs for new graduates.
+Software powers our economy, but less than 2.4 percent of college students graduate with a CS degree. That means there aren’t going to be enough graduates to fill the jobs. To make matters worse, 95 percent of our schools don’t teach programming.
+
+Fortunately, there’s something we can do about it. This December, we’re going to give students their first taste of coding by participating in a national hour of computer science instruction called the Hour of Code. The hour is part of Computer Science Education Week (Dec. 7-13), and our goal is to get kids to think, create, and have a blast -- all while learning some computer programming.
+
+Students (and adults) across the country are getting involved and I’d like you to join as well. Here’s how you can help:
+
+Get the word out. Report the event, blog, tweet, send emails, tell your friends. Give an hour to mentor students during the Hour of Code. Bring the Hour of Code to your company or organization. The event is not just for children and we can all benefit from knowing more about how software works. Take the Hour of Code yourself

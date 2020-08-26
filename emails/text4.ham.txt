@@ -1,0 +1,10 @@
+Hi,
+
+Thanks for signing up to Overleaf! If you ever get lost,
+you can log in again with the email address 'navaneetha.m29@gmail.com'.
+
+If you're new to LaTeX, take a look at our Help Guides and Templates.
+
+PS. We love talking to our users about Overleaf.
+Reply to this email to get in touch with us directly, whatever the reason.
+Questions, comments, problems, suggestions, all welcome!
