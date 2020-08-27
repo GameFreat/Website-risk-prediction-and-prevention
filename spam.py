@@ -4,31 +4,7 @@ from sklearn.naive_bayes import MultinomialNB
 from sklearn.model_selection import train_test_split as tts
 from sklearn.metrics import accuracy_score
 import pickle as c
-
-
-def make_dict():
-    direc = "emails/"
-    files = os.listdir(direc)
-
-    emails = [direc + email for email in files]
-
-    words = []
-    c = len(emails)     #counting total number of emails
-
-    for email in emails:
-        f = open(email, encoding="latin-1")     #opening each mail
-        blob = f.read()
-        words += blob.split(" ")     #splitting each word
-        print (c)
-        c -= 1
-
-    for i in range(len(words)):
-        if not words[i].isalpha():
-            words[i]  = ""     #deleting non alpha words
-
-    dictionary = Counter(words)     #function to count each word in dictionary
-    del dictionary[""]     #deletion of empty spaces
-    return (dictionary.most_common(3000))
+from make_dict import make_Dict
 
 def make_dataset(dictionary):
     direc = "emails/"
@@ -61,7 +37,8 @@ def save(clf, name):
     print ("saved")
 
 
-d = make_dict()
+a = make_Dict()
+d = a.dict()
 features, labels = make_dataset(d)
 
 #print (len(features), len(labels))
