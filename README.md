@@ -18,6 +18,8 @@ C. Kruegel, G. Vigna and W. Robertson, “A multi-model approach to the detectio
 W. Robertson, F. Maggi, C. Kruegel and G. Vigna, “Effective Anomaly
 Detection with Scarce Training Data”. Proceedings of the Network and Distributed System Security Symposium (NDSS), San Diego, CA USA, February 2010.
 
+4) SVM codes : https://github.com/OneRepublicMarchingOn/FI-XSS-SVM/blob/master/xss-linear-svm-original.py 
+
 __Modifications Done__
 
 The features extracted from the above codes were used to fit each of the classifier models for training and testing. 
