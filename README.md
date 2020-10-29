@@ -7,6 +7,11 @@ Team members:-
 3) 	Midhul M
 4)	Naveen B Jacob
 
+__Description of the project__
+
+The project is based on Rule based unsupervised Learning. The project is divided into 2 where the phase 1 is on implementing the tree while the phase 2 is based on the feature extraction.
+The phase 1 is assigned to @Naveen B Jacob and @Navaneetha.M. Phase 2 is assigned to @Midhul and @Krishnapriya.
+
 __Reference sites and papers :__
 
 1) Datasets and feature extraction : https://github.com/OneRepublicMarchingOn/FI-XSS-SVM
