@@ -9,8 +9,7 @@ Team members:-
 
 __Description of the project__
 
-The project is based on Rule based unsupervised Learning. The project is divided into 2 where the phase 1 is on implementing the tree while the phase 2 is based on the feature extraction.
-The phase 1 is assigned to @NaveenJacob and @Navaneetha-Murali and the phase 2 is assigned to @midhulmdas and @krishnapriya.aji25.
+The project is based on Rule based unsupervised Learning. 
 
 __Reference sites and papers :__
 
