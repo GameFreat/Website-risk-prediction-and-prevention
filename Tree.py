@@ -81,3 +81,72 @@ class Calculate:
     gain = uncertianity -prob * gini_idx(left_set)-(1-prob)*gini_idx(right_set)
 
     return gain
+
+#-------------------Naveen-----------------------------------------
+
+class Leaf:
+
+    def __init__(self, rows):
+        self.predictions = class_counts(rows)
+
+#................Asks a question...................
+class Node:
+    #This holds a reference to the question, and to the two child nodes.
+
+
+    def __init__(self,rule,right_node,left_node):
+        
+        self.rule = rule
+        self.right_node = right_node
+        self.left_node = left_node
+
+class DecisionTree:
+    def grow_tree(self,rows):
+    
+        cal = Calculate()
+        gain, question = cal.find_best_split(rows)
+        if gain == 0:
+            return Leaf(rows)
+
+        right, left = partition(rows, question)
+
+        right_branch = grow_tree(right)
+
+        left_branch = grow_tree(left)
+
+        return Node(question, right_branch, left_branch)
+
+    #...............function to print tree.............
+    def print_tree(self,node, spacing=""):
+        
+
+        if isinstance(node, Leaf):
+            print (spacing + "Predict", node.predictions)
+            return
+
+        print (spacing + str(node.question))
+
+        print (spacing + '--> True:')
+        print_tree(node.true_branch, spacing + "  ")
+
+        print (spacing + '--> False:')
+        print_tree(node.false_branch, spacing + "  ")
+
+
+    def classify(self,row, node):
+        if isinstance(node, Leaf):
+            return node.predictions
+            
+        if node.question.match(row):
+            return classify(row, node.true_branch)
+        else:
+            return classify(row, node.false_branch)
+
+
+
+    def print_leaf(self,counts):
+        total = sum(counts.values()) * 1.0
+        probs = {}
+        for lbl in counts.keys():
+            probs[lbl] = str(int(counts[lbl] / total * 100)) + "%"
+        return probs
