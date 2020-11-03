@@ -2,12 +2,6 @@
 import csv
 
 training_data = []
-testing_data = []
-
-with open("/content/test_Set.csv") as tsv:
-    for line in csv.reader(tsv, delimiter=","):
-                
-        testing_data.append(list(line))
 
 with open("/content/xss.csv") as tsv:
             for line in csv.reader(tsv, delimiter=","):
@@ -81,3 +75,33 @@ class Calculate:
     gain = uncertianity -prob * gini_idx(left_set)-(1-prob)*gini_idx(right_set)
 
     return gain
+
+def find_best_split(self,rows):
+    
+      best_gain = 0  
+      best_question = None  # keep train of the feature / value that produced it
+      current_uncertainty = self.gini_idx(rows)
+      n_features = len(rows[0]) - 1  # number of columns
+
+      for col in range(n_features):  # for each feature
+
+          values = set([row[col] for row in rows])  # unique values in the column
+
+          for val in values:  # for each value
+
+              question = Node_Rules(col, val)
+
+              # try splitting the dataset
+              true_rows, false_rows = partition(rows, question)
+
+
+              if len(true_rows) == 0 or len(false_rows) == 0:
+                  continue
+
+              # Calculate the information gain from this split
+              gain = self.information_gain(true_rows, false_rows, current_uncertainty)
+
+              if gain >= best_gain:
+                  best_gain, best_question = gain, question
+
+      return best_gain, best_question
