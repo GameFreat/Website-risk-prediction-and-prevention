@@ -126,89 +126,37 @@ class Node:
 
 
 class DecisionTree:
-     
-    def __init__(self,count):
-          self.count=count
+    def build_tree(self,dataset,tree,par,count):
 
-    def grow_tree(self,rows):
-        
+        count +=1
         cal = Calculate()
-        gain, question = cal.find_best_split(rows)
+        gain, question = cal.find_best_split(dataset)
         if gain == 0:
-            return Leaf(rows)
+            return tree#Leaf(dataset)
 
-        right, left = partition(rows, question)
-        right_branch = self.grow_tree(right)
-
-        left_branch = self.grow_tree(left)
-
-        return Node(question, right_branch, left_branch)
-
-    def build_tree(self,rows,tree,par):
-        
-        self.count +=1
-        cal = Calculate()
-        gain, question = cal.find_best_split(rows)
-        if gain == 0:
-            return Leaf(rows)
-
-        if self.count == 1:
+        if count == 1:
             par=question
             tree.create_node(question,par)
-            right, left = partition(rows, question)
-            right_branch = self.build_tree(right,tree,par)
-            left_branch = self.build_tree(left,tree,par)
-        print(self.count)
+            right, left = partition(dataset, question)
+            right_branch = self.build_tree(right,tree,par,count)
+            left_branch = self.build_tree(left,tree,par,count)
+        print(count)
         #tree.show()
         try:
           tree.create_node(question,question,parent=par)
         except:
-          print('DuplicatedNodeIdError')
-        par=question  
-        right, left = partition(rows, question)
-        right_branch = self.build_tree(right,tree,par)
 
-        left_branch = self.build_tree(left,tree,par)
+            print('DuplicatedNodeIdError')
+        
+        par=question
+        right, left = partition(dataset, question)
+        right_branch = self.build_tree(right,tree,par,count)
+
+        left_branch = self.build_tree(left,tree,par,count)
 
         return tree
-    #...............function to print tree.............
-    def print_tree(self,node, spacing=""):
 
-        if isinstance(node, Leaf):
-            print (spacing + "Node", node.predictions)
-            return
-
-        print (spacing + str(node.rule))
-
-        print (spacing + '--> Yes:')
-        self.print_tree(node.right_node, spacing + "\t")
-
-        print (spacing + '--> No:')
-        self.print_tree(node.left_node, spacing + "\t")
-
-    def classify(self,row, node):
-        if isinstance(node, Leaf):
-            return node.predictions
-            
-        if node.rule.comp(row):
-            return self.classify(row, node.right_node)
-        else:
-            return self.classify(row, node.left_node)
-
-
-
-    def print_leaf(self,counts):
-        
-        total = sum(counts.values()) * 1.0
-        probs = {}
-        for lbl in counts.keys():
-            probs[lbl] = str(int(counts[lbl] / total * 100)) + "%"
-        return probs
-
-
-
-t = DecisionTree(0)
+t = DecisionTree()
 tree = treelib.Tree()
-my_tree = t.build_tree(training_data,tree,'')
+my_tree = t.build_tree(training_data,tree,'',0)
 tree.show()
-#print(t.print_tree(my_tree))
