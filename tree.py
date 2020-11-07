@@ -1,109 +1,92 @@
-#...............PROGRAM TO BUILD AND PRINT DECISION TREES.............
+# .............program to build tree(NAVANEETHA).....................
 import csv
-attributes = ['url_length','Keywords','Encoded','spcl_char','Domain','Label']
+import treelib
 
 training_data = []
-testing_data = []
 
 with open("test_Set.csv") as tsv:
     for line in csv.reader(tsv, delimiter=","):
-                
-        testing_data.append(list(line))
+        training_data.append(list(line))
 
-with open("xss.csv") as tsv:
-            for line in csv.reader(tsv, delimiter=","):
-                
-                training_data.append(list(line))
-
-def unique_vals(rows, col):
-    #Find the unique values for a column in a dataset
-    return set([row[col] for row in rows])
+attributes = ['url_length', 'Keywords', 'Encoded', 'spcl_char', 'Domain', 'Label']
 
 
-def class_counts(rows):
-    #Counts the number of each type of example in a dataset
-    counts = {}  # a dictionary of label -> count.
-    for row in rows:
-        # in our dataset format, the label is always the last column
-        label = row[-1]
-        if label not in counts:
-            counts[label] = 0
-        counts[label] += 1
-    return counts
+# .............Returns the Unique value in the dataset..........
+def get_unique_val(row, col):
+    return set([r[col] for r in row])
 
-#class_counts(training_data)
 
-def is_numeric(value):
-    #Test if a value is numeric.
-    return isinstance(value, int) or isinstance(value, float)
+# .........COunts no of type of data in dataset.......
+def count_Class(row):
+    count = {}
+    for r in row:
 
-is_numeric(7)
+        attribute = r[-1]
+        if attribute not in count:
+            count[attribute] = 0
 
-class Question:
+        count[attribute] += 1
+    return count
 
-    def __init__(self, column, value):
-        self.column = column
-        self.value = value
 
-    def match(self, example):
-        # Compare the feature value in an example to the
-        # feature value in this question.
-        val = example[self.column]
-        if is_numeric(val):
-            return val >= self.value
-        else:
-            return val == self.value
+# ...................Class defines the rules in the node...........
+
+class Node_Rules:
+    # ............for numeric data..............
+    def __init__(self, col, val):
+        self.col = col
+        self.val = val
+
+    def comp(self, row):
+        values = row[self.col]
+        return values >= self.val
 
     def __repr__(self):
-        # This is just a helper method to print
-        # the question in a readable format.
-        condition = "=="
-        if is_numeric(self.value):
-            condition = ">="
-        return "Is %s %s %s?" % (
-            attributes[self.column], condition, str(self.value))
+        contn = '>='
+        return "Is %s %s %s?" % (attributes[self.col], contn, str(self.val))
 
-def partition(rows, question):
-    
-    true_rows, false_rows = [], []
-    for row in rows:
-        if question.match(row):
-            true_rows.append(row)
+
+def partition(rows, qtn):
+    t_row, f_row = [], []
+    for r in rows:
+
+        if qtn.comp(r):
+            t_row.append(r)
         else:
-            false_rows.append(row)
-    return true_rows, false_rows
+            f_row.append(r)
+
+    return t_row, f_row
+
 
 class Calculate:
-
-    def gini(self,rows):
-        #.............Calculate the Gini Impurity for a list of rows..............
-        counts = class_counts(rows)
+    # ...........navaneetha............
+    # .............Calculates Gini Impurity.................
+    def gini_idx(self, rows):
+        count = count_Class(rows)
         impurity = 1
-        for lbl in counts:
-            prob_of_lbl = counts[lbl] / float(len(rows))
-            impurity -= prob_of_lbl**2
+        for target in count:
+            prob = count[target] / float(len(rows))
+            impurity -= prob ** 2
+
         return impurity
 
+    # ..........navaneetha............
+    # ...........Calculates Information-gain............
+    def information_gain(self, left_set, right_set, uncertainity):
 
-    def info_gain(self,left, right, current_uncertainty):
-    #.........Information Gain................
-        p = float(len(left)) / (len(left) + len(right))
-        return current_uncertainty - p * gini(left) - (1 - p) * gini(right)
+        total_length = len(left_set) + len(right_set)
+        prob = float(len(left_set)) / total_length
+        gain = uncertainity - prob * self.gini_idx(left_set) - (1 - prob) * self.gini_idx(right_set)
 
-    # Calculate the uncertainy of our training data.
-    current_uncertainty = gini(training_data)
-    current_uncertainty
+        return gain
 
-    # How much information do we gain by partioning on 'Green'?
-    true_rows, false_rows = partition(training_data, Question(1, 1))
-    info_gain(true_rows, false_rows, current_uncertainty)
+        # .............need to push..................
 
-    def find_best_split(self,rows):
-        """Find the best question to ask by iterating over every feature / value
-        and calculating the information gain."""
-        best_gain = 0  # keep track of the best information gain
+    def find_best_split(self, rows):
+
+        best_gain = 0
         best_question = None  # keep train of the feature / value that produced it
-        current_uncertainty = gini(rows)
+        current_uncertainty = self.gini_idx(rows)
         n_features = len(rows[0]) - 1  # number of columns
 
         for col in range(n_features):  # for each feature
@@ -112,22 +95,17 @@ class Calculate:
 
             for val in values:  # for each value
 
-                question = Question(col, val)
+                question = Node_Rules(col, val)
 
                 # try splitting the dataset
                 true_rows, false_rows = partition(rows, question)
 
-                # Skip this split if it doesn't divide the
-                # dataset.
                 if len(true_rows) == 0 or len(false_rows) == 0:
                     continue
 
                 # Calculate the information gain from this split
-                gain = info_gain(true_rows, false_rows, current_uncertainty)
+                gain = self.information_gain(true_rows, false_rows, current_uncertainty)
 
-                # You actually can use '>' instead of '>=' here
-                # but I wanted the tree to look a certain way for our
-                # toy dataset.
                 if gain >= best_gain:
                     best_gain, best_question = gain, question
 
@@ -137,76 +115,65 @@ class Calculate:
 class Leaf:
 
     def __init__(self, rows):
-        self.predictions = class_counts(rows)
-
-#................Asks a question...................
-class Decision_Node:
-    #This holds a reference to the question, and to the two child nodes.
+        self.predictions = count_Class(rows)
 
 
-    def __init__(self,
-                 question,
-                 true_branch,
-                 false_branch):
-        self.question = question
-        self.true_branch = true_branch
-        self.false_branch = false_branch
+# ................Asks a question...................
+class Node:
+    # This holds a reference to the question, and to the two child nodes.
 
+    def __init__(self, rule, right_node, left_node):
+        self.rule = rule
+        self.right_node = right_node
+        self.left_node = left_node
+
+
+# ................Midhul...................
 class DecisionTree:
-    def build_tree(self,rows):
-    
+
+    def _init_(self):
+        self.arr = []
+
+    def build_tree(self, dataset, tree, par):
+
         cal = Calculate()
-        gain, question = cal.find_best_split(rows)
+        gain, question = cal.find_best_split(dataset)
+
+        # .......Checking for leaf node.......
         if gain == 0:
-            return Leaf(rows)
+            return Leaf(dataset)
 
-        true_rows, false_rows = partition(rows, question)
+        self.arr.append(question)
+        if tree.root == None:
 
-        true_branch = build_tree(true_rows)
+            par = question
 
-        false_branch = build_tree(false_rows)
-
-        return Decision_Node(question, true_branch, false_branch)
-
-    #...............function to print tree.............
-    def print_tree(self,node, spacing=""):
-        
-
-        if isinstance(node, Leaf):
-            print (spacing + "Predict", node.predictions)
-            return
-
-        print (spacing + str(node.question))
-
-        print (spacing + '--> True:')
-        print_tree(node.true_branch, spacing + "  ")
-
-        print (spacing + '--> False:')
-        print_tree(node.false_branch, spacing + "  ")
-
-
-    def classify(self,row, node):
-        if isinstance(node, Leaf):
-            return node.predictions
-            
-        if node.question.match(row):
-            return classify(row, node.true_branch)
+            tree.create_node(question, par)
+            right, left = partition(dataset, question)
+            right_branch = self.build_tree(right, tree, par)
+            left_branch = self.build_tree(left, tree, par)
         else:
-            return classify(row, node.false_branch)
+
+            if question in arr:
+                ID = question + '1'
+                tree.create_node(question, ID, parent=par)
+                par = ID
+
+            else:
+                tree.create_node(question, question, parent=par)
+                par = question
+
+            right, left = partition(dataset, question)
+            right_branch = self.build_tree(right, tree, par)
+            left_branch = self.build_tree(left, tree, par)
+
+        return tree
 
 
-
-    def print_leaf(self,counts):
-        total = sum(counts.values()) * 1.0
-        probs = {}
-        for lbl in counts.keys():
-            probs[lbl] = str(int(counts[lbl] / total * 100)) + "%"
-        return probs
-
-
-t=DecisionTree()   
-my_tree = t.build_tree(training_data)
-
-for row in testing_data:
-    print ("Actual: %s. Predicted: %s" %
-           (row[-1], t.print_leaf(t.classify(row, my_tree))))
+t = DecisionTree()
+tree = treelib.Tree()
+arr = []
+my_tree = t.build_tree(training_data, tree, '')
+# tree.show()
+print(tree.leaves())
+print(tree.paths_to_leaves())
