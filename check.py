@@ -130,7 +130,7 @@ class Node:
     #This holds a reference to the question, and to the two child nodes.
 
     def __init__(self,rule,right_node,left_node):
-        
+
         self.rule = rule
         self.right_node = right_node
         self.left_node = left_node
@@ -247,6 +247,64 @@ class RuleExtractor:
     # def Calc_Accuracy(self):
 
 
+class Test_fitted_models:
+    def find_rule(self, rules, data):
+        global pos
+        attributes = ['url_length', 'Keywords', 'Encoded', 'spcl_char', 'Domain', 'Label']
+        qtn = ''
+        flag = 0
+        split = []
+        num = ''
+        for key, rule in rules.items():
+            # print(rule)
+
+            for i in range(len(rule)):
+                # print(rule[i])
+                qtn = rule[i]
+                split = qtn.split()
+                num = split[-1]
+                n = num.translate({ord('?'): None})
+                print(qtn)
+                for j in range(len(attributes)):
+                    if attributes[j] in qtn:
+                        pos = j
+                        print(pos)
+                if data[pos] >= int(n):
+                    if i == (len(rule) - 1):
+                        return rule
+                    else:
+                        continue
+                        # print(flag)
+                else:
+                    continue
+
+
+    def comp_rules(self, rules, dataset, tree):
+        node = treelib.Node()
+        for data in dataset:
+            # print(data)
+            rule = self.find_rule(rules, data)
+            print(rule)
+
+
+test_data = [[16, 0, 0, 2, 0, 0],
+             [18, 0, 0, 2, 0, 0],
+             [15, 0, 0, 2, 0, 0],
+             [12, 0, 0, 2, 0, 0],
+             [70, 1, 0, 7, 0, 1],
+             [95, 1, 2, 9, 0, 1],
+             [67, 2, 1, 8, 0, 1],
+             [82, 4, 7, 7, 0, 1]]
+
+t = DecisionTree()
+tree = treelib.Tree()
+my_tree = t.build_tree(training_data, tree, '')
 r = RuleExtractor()
 r.Create_dict()
 r.extract_leaf()
+rules = r.Create_dict()
+# for key, rule in rules.items():
+    # print(rule)
+# print(rules)
+test = Test_fitted_models()
+test.comp_rules(rules, test_data, my_tree)
