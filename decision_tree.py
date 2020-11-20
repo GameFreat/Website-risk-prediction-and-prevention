@@ -1,16 +1,7 @@
-# .............program to build tree(NAVANEETHA).....................
-import csv
 import treelib
+from data_split import *
 
-# from __future__ import unicode_literals
-
-training_data = []
-
-with open("test_Set.csv") as tsv:
-    for line in csv.reader(tsv, delimiter=","):
-        training_data.append(list(line))
-
-attributes = ['url_length', 'Keywords', 'Encoded', 'spcl_char', 'Domain', 'Label']
+attributes = ['url_length', 'Keywords', 'Url_count', 'spcl_char', 'Label']
 
 
 class Data:
@@ -19,7 +10,7 @@ class Data:
     def get_unique_val(self, row, col):
         return set([r[col] for r in row])
 
-    # .........COunts no of type of data in dataset.......
+    # .........Counts no of type of data in dataset.......
     def count_Class(self, row):
 
         count = {}
@@ -84,7 +75,8 @@ class Calculate:
 
         total_length = len(left_set) + len(right_set)
         prob = float(len(left_set)) / total_length
-        gain = uncertainity - prob * self.gini_idx(left_set) - (1 - prob) * self.gini_idx(right_set)
+        gain = uncertainity - prob * \
+               self.gini_idx(left_set) - (1 - prob) * self.gini_idx(right_set)
 
         return gain
 
@@ -100,7 +92,8 @@ class Calculate:
 
         for col in range(n_features):  # for each feature
 
-            values = set([row[col] for row in rows])  # unique values in the column
+            # unique values in the column
+            values = set([row[col] for row in rows])
 
             for val in values:  # for each value
 
@@ -113,7 +106,8 @@ class Calculate:
                     continue
 
                 # Calculate the information gain from this split
-                gain = self.information_gain(true_rows, false_rows, current_uncertainty)
+                gain = self.information_gain(
+                    true_rows, false_rows, current_uncertainty)
 
                 if gain >= best_gain:
                     best_gain, best_question = gain, question
@@ -129,6 +123,8 @@ class Leaf:
 
 
 # ................Asks a question...................
+
+
 class Decision_Node:
     # This holds a reference to the question, and to the two child nodes.
 
@@ -167,7 +163,8 @@ class DecisionTree:
                 par = ID
 
             else:
-                tree.create_node(str(Leaf(dataset).predictions), self.counter.get_count() + str(question), parent=par)
+                tree.create_node(str(Leaf(dataset).predictions),
+                                 self.counter.get_count() + str(question), parent=par)
                 par = question
             return tree
 
@@ -201,97 +198,6 @@ class DecisionTree:
         return Decision_Node(question, right, left)
 
 
-class RuleExtractor:
-    def extract_rules(self):
-        t = DecisionTree()
-        tree = treelib.Tree()
-        arr = []
-        my_tree = t.build_tree(training_data, tree, '')
-        # tree.show()
-        # print(tree.leaves(), '\n')
-        return (tree)
-
-    def Create_dict(self):
-        extractor = {}
-        rule = self.extract_rules().paths_to_leaves()
-        # print(rule)
-        for i in range(len(rule)):
-            extractor[i] = rule[i]
-            # print(extractor[i])
-        # print("Length = ", len(extractor))
-        return extractor
-
-
-leaf_nodes = []
-
-
-def tree_traverse(tree):
-    sub = treelib.Tree()
-    node = tree.all_nodes()
-    # print(node, '\n')
-    par = node[0].identifier
-    # print('parent', par)
-    if tree.root != None:
-        if len(tree.children(par)) == 0:
-            leaf_nodes.append(node[0].tag)
-            # print(node[0].tag)
-            # return node[0].tag
-
-        else:
-            child = tree.children(par)
-
-            l = child[0]
-            r = child[1]
-            # .....left side traversal.......
-            l_sub = tree.subtree(l.identifier)
-            res = tree_traverse(l_sub)
-
-            # ......right side traversal.......
-            r_sub = tree.subtree(r.identifier)
-            res = tree_traverse(r_sub)
-            # return res
-
-
-def prediction (rules, data):
-    # print(rules, "\n", data)
-    # print(leaf_nodes[2])
-    flag = 0
-    attributes = ['url_length', 'Keywords', 'Encoded', 'spcl_char', 'Domain', 'Label']
-    for i in range(len(rules)):
-        qtn = rules[i]
-        # print(qtn) ....correct....
-        split = qtn.split()
-        num = split[-1]
-        n = num.translate({ord('?'): None})
-        print(n)
-        print(split[1])
-        pos = attributes.index(split[1])
-        print(pos)
-        print(data[pos])
-        if data[pos] >= int(n):
-            print(i)
-            # if i == (len(rules) - 1):
-                # print(rules)
-                # return rules
-        else:
-            flag = 1
-            # break
-    if flag == 0:
-        print("Not vul")
-    else:
-        print("VUL")
-
-
 t = DecisionTree()
 tree = treelib.Tree()
 my_tree = t.build_tree(training_data, tree, '')
-r = RuleExtractor()
-rules = r.Create_dict()
-# r.extract_leaf()
-val = []
-tree_traverse(tree)
-# print(leaf_nodes)
-val.append(tree_traverse(tree))
-# print(val)
-test_data = [40,112,220,322,220,121]
-prediction(rules[2], test_data)
