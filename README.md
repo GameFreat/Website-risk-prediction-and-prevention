@@ -27,3 +27,7 @@ Detection with Scarce Training Data”. Proceedings of the Network and Distribut
 __Modifications Done__
 
 The features extracted from the above codes were used to fit each of the classifier models for training and testing. 
+__To execute the project__
+Use the index.html to run with a UI.
+Run the testing.py file.
+to run the hwole file you will need the treelib library installed. To install it run "pip install treelib".
