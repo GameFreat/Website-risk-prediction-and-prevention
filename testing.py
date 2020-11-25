@@ -6,7 +6,8 @@ import _pickle as file
 class Testing:
 
     def Test(self, rules, data):
-        attributes = ['url_length', 'Keywords', 'Url_count', 'spcl_char', 'Label']
+        attributes = ['url_length', 'Keywords',
+                      'Url_count', 'spcl_char', 'Label']
         qtn = ''
         split = []
         num = ''
@@ -62,5 +63,6 @@ with open("rules.mdl", 'rb') as fp:
     rules = file.load(fp)
 test = Testing()
 c = test.accuracy(rules)
+print(testing_data)
 print('len of test data::', len(testing_data))
 print('acc=', c / len(testing_data))
