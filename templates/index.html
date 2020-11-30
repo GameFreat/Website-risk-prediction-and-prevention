@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Calculator</title>
+    <title>Check Attacks</title>
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css"
@@ -28,17 +28,17 @@
     <!-- Form -->
     <div class="container">
       <form action="/send" method="POST">
-        <label for="Number One">First Number</label>
+        <label for="Number One">Enter the URL</label>
         <input
           type="text"
           placeholder="First Number"
           class="u-full-width"
           name="num1"
         />
-        <input type="submit" value="Calculate" id="calc_btn" />
+        <input type="submit" value="Check" id="calc_btn" placeholder="Enter the content to check" />
         <br />
         <div class="alert">
-          {{ sum }}
+          {{ value }}
         </div>
       </form>
     </div>

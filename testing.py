@@ -62,5 +62,5 @@ with open("rules.mdl", 'rb') as fp:
     rules = file.load(fp)
 test = Testing()
 c = test.accuracy(rules)
-print('Length of the test data : ', len(testing_data))
-print('Accuracy = ', c / len(testing_data))
+print('len of test data::', len(testing_data))
+print('acc=', c / len(testing_data))
