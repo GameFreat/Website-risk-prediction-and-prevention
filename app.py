@@ -2,7 +2,6 @@ from flask import Flask, render_template, request
 import re
 import _pickle as c
 from testing import Testing
-
 with open("rules.mdl", 'rb') as fp:
     rules = c.load(fp)
 
@@ -36,8 +35,7 @@ class Features():
         return features
 
 
-def prediction(sum):
-    url = sum
+def predict(url):
     f = Features()
     features = f.Create_features(url)
     # print(features)
@@ -45,16 +43,18 @@ def prediction(sum):
     r = test.Test(rules, features)
     label = eval(r[-1])
     d = dict(label)
-    for key in d.keys():
-
-        if(key == '0'):
-            return("You are safe!This website is not vulnerable to XSS attack")
-        else:
-            return("Alert!This website is vulnerable to XSS attack")
+    # print(d.keys())
+    if not url:
+        return("Empty string")
+    else:
+        for key in d.keys():
+            if(key == '0'):
+                return("\nYou are safe!This website is not vulnerable to XSS attack\n")
+            else:
+                return("\nAlert!This website is vulnerable to XSS attack\n")
 
 
 app = Flask(__name__)
-app.config["CACHE_TYPE"] = "null"
 
 
 @app.route('/')
@@ -63,11 +63,11 @@ def main():
 
 
 @app.route('/send', methods=['POST'])
-def send(value=sum):
+def send(sum=sum):
     num = request.form['num1']
-    sum = chr(num)
-    sum = prediction(sum)
-    return render_template('index.html', value=sum)
+    sum = str(num)
+    sum = predict(sum)
+    return render_template('index.html', sum=sum)
 
 
 if __name__ == ' __main__':
