@@ -14,6 +14,8 @@ class Data:
     def count_Class(self, row):
 
         count = {}
+        check = []
+        key = []
         for r in row:
 
             attribute = r[-1]
@@ -22,8 +24,21 @@ class Data:
                 count[attribute] = 0
 
             count[attribute] += 1
-
-        return count
+        # ......added.........
+        if len(count) == 1:
+            return count
+        else:
+            if len(count) > 1:
+                check = list(count.values())
+                key = list(count.keys())
+                large = check[0]
+                pos = 0
+                for i in range(len(check)):
+                    if large < check[i]:
+                        large = check[i]
+                        pos = i
+            new = {str(key[pos]): large}
+        return new
 
     # ........Class Partitions the Dataset.........
     def partition(self, rows, qtn):
@@ -76,7 +91,7 @@ class Calculate:
         total_length = len(left_set) + len(right_set)
         prob = float(len(left_set)) / total_length
         gain = uncertainity - prob * \
-               self.gini_idx(left_set) - (1 - prob) * self.gini_idx(right_set)
+            self.gini_idx(left_set) - (1 - prob) * self.gini_idx(right_set)
 
         return gain
 
