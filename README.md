@@ -31,3 +31,17 @@ __To execute the project__
 Use the index.html to run with a UI.
 Run the testing.py file.
 to run the whole file you will need the treelib library installed. To install it run "pip install treelib".
+__To Run the gui__
+    Required components:-
+        *pipenv
+        *flask\\insinde the virtual env
+        steps for running:
+            * pip3 install pipenv
+            * pipenv shell
+            * pipenv install flask
+            * flask run
+            After doing this you can use __ctrl+c__ to terminate the flask and then type __exit__ to exit the virtual env
+            for running next time:- 
+                In the home dir :-
+                    * pipenv shell
+                    * flask run
