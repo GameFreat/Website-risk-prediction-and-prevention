@@ -8,9 +8,16 @@ def train_test(dataset, test_state):
     training_set, testing_set = [], []
     # dataset=[]
     c = 0
+    ''' with open('tree/xss.csv') as tsv:
+          for line in csv.reader(tsv, delimiter=","):  
+              data.append(list(line))'''
+    # ........Removing list with same values......
+    ''' for d in data:
+            if d not in dataset:
+                dataset.append(d)'''
     len_train = (len(dataset) * train_ratio) / 100
     len_test = len(dataset) - len_train
-    #random.shuffle(data)
+    # random.shuffle(data)
     # .....Splitting the dataset.......
     for i in range(int(len_train)):
         training_set.append(dataset[i])

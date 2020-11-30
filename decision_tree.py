@@ -43,7 +43,7 @@ class Data:
 
 class Node_Rules:
     # ............for numeric data..............
-    def _init_(self, col, val):
+    def __init__(self, col, val):
         self.col = col
         self.val = val
 
@@ -51,7 +51,7 @@ class Node_Rules:
         values = row[self.col]
         return values >= self.val
 
-    def _repr_(self):
+    def __repr__(self):
         contn = '>='
         return "Is %s %s %s?" % (attributes[self.col], contn, str(self.val))
 
@@ -76,7 +76,7 @@ class Calculate:
         total_length = len(left_set) + len(right_set)
         prob = float(len(left_set)) / total_length
         gain = uncertainity - prob * \
-            self.gini_idx(left_set) - (1 - prob) * self.gini_idx(right_set)
+               self.gini_idx(left_set) - (1 - prob) * self.gini_idx(right_set)
 
         return gain
 
