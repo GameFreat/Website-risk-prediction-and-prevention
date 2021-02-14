@@ -1,11 +1,11 @@
-### Steps in running the project
+## Steps in running the project
 
-## Required items
+### Required items
 
     * pipenv
     * flask inside * \\the virtual env *
 
-## Steps
+### Steps
 
     * Install pipenv
         * ```pip3 install pipenv```
