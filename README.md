@@ -51,3 +51,7 @@ __To Run the gui__
                 In the home dir :-
                     * pipenv shell
                     * flask run
+
+
+Individual Contributions of each member in the group along with the sample output of our project is provided in the link below
+https://drive.google.com/drive/folders/1Nbwn_nqyzy99hxTPoV-73XsKSh-5PrjQ?usp=sharing
